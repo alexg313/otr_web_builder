@@ -76,8 +76,9 @@ function copyNodeModules(cb) {
 exports.bundle = bundle;
 
 module.exports = {
-    opts: (opts) => {
-        options = opts || options;
+    setOptions: (opts) => {
+        options = assign({}, options, opts);
+        log.info("Web builder options to build with are: ", options);
     },
     copyNodeModules: copyNodeModules,
     bundle: bundle
