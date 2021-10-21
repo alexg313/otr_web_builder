@@ -8,11 +8,46 @@ let argv = require('yargs').argv;
 let assign = require('lodash.assign');
 let log = require('fancy-log');
 let connect = require('gulp-connect');
+let sass = require('gulp-sass');
+let cleanCSS = require('gulp-clean-css');
+let del = require('del');
+
+sass.compiler = require('node-sass');
 
 let options = {
-    rootDir: "./",
-    buildDir: "build/",
+    port: 5555,
+    rootDir: './',
+    baseDir: 'app',
+    buildDir: 'build/',
+    buildCssDir: 'build/assets/css',
     bundleOpts: {}
+}
+
+function minifySass() {
+    return gulp.src(options.baseDir + '/**/*.scss')
+        .pipe(sass.sync())
+        .pipe(cleanCSS({debug: true, compatibility: 'ie8'}, function(details) {
+            console.log(details.name + ': ' + details.stats.minifiedSize);
+        }))
+        .pipe(gulp.dest(options.buildCssDir))
+        .pipe(connect.reload());
+}
+
+
+function clean() {
+    return del([options.buildDir]).then(function(paths) {
+        console.log('Deleted files and folders:\n', paths.join('\n'));
+    });
+}
+
+// Type gulp server --versioned for the versioned server
+function connectServer(done) {
+    connect.server({
+        root: argv.versioned ? ['build/versioned'] : ['build'],
+        port: options.port,
+        livereload: true
+    });
+    done();
 }
 
 function bundle(done, isWatchOn) {
@@ -28,13 +63,16 @@ function bundle(done, isWatchOn) {
     let addOverrides = assign(defaultOpts, options.bundleOpts);
     let opts = assign({}, watchify.args, addOverrides);
     let browserModules = watchify(browserify(opts).plugin(tsify));
+
     let hasErrors = false;
+    let errorCount = 0;
 
     let bundler = function() {
         log("Bundling.. this may take awhile on the initial build...");
         return browserModules
             .bundle()
             .on('error', function (error) {
+                ++errorCount;
                 log.error(error.toString());
                 hasErrors = true;
             })
@@ -43,7 +81,7 @@ function bundle(done, isWatchOn) {
             .pipe(connect.reload())
             .on('end', function() {
                 if(hasErrors) {
-                    throw new Error("Typescript compilation failed");
+                    throw new Error("Typescript compilation failed with " + errorCount + " errors");
                 }
                 log("Is watch on: ", isWatchOn);
                 if(!isWatchOn) {
@@ -73,7 +111,13 @@ function copyNodeModules(cb) {
         })
 }
 
+/*
+Un comment for local testing
 exports.bundle = bundle;
+exports.minifySass = minifySass;
+exports.clean = clean;
+exports.connectServer = connectServer;
+*/
 
 module.exports = {
     setOptions: (opts) => {
@@ -81,5 +125,8 @@ module.exports = {
         log.info("Web builder options to build with are: ", options);
     },
     copyNodeModules: copyNodeModules,
-    bundle: bundle
+    bundle: bundle,
+    clean: clean,
+    connectServer: connectServer,
+    minifySass: minifySass
 };
