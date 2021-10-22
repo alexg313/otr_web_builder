@@ -77,7 +77,7 @@ function bundle(done, isWatchOn) {
                 hasErrors = true;
             })
             .pipe(source("bundle.js"))
-            .pipe(gulp.dest(options.buildDir + options.baseDir))
+            .pipe(gulp.dest(options.buildDir))
             .pipe(connect.reload())
             .on('end', function() {
                 if(hasErrors) {
