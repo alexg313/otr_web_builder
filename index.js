@@ -77,7 +77,7 @@ function bundle(done, isWatchOn) {
                 hasErrors = true;
             })
             .pipe(source("bundle.js"))
-            .pipe(gulp.dest("build/app"))
+            .pipe(gulp.dest(options.buildDir + options.baseDir))
             .pipe(connect.reload())
             .on('end', function() {
                 if(hasErrors) {
@@ -111,8 +111,9 @@ function copyNodeModules(cb) {
         })
 }
 
+
+// Un comment for local testing
 /*
-Un comment for local testing
 exports.bundle = bundle;
 exports.minifySass = minifySass;
 exports.clean = clean;
