@@ -23,6 +23,53 @@ let options = {
     bundleOpts: {}
 }
 
+function replaceVars() {
+
+    var domain = {
+        name: 'DEVO',
+        apiEndpoint: 'https://otr-backend-service-us-devo.offtherecord.com',
+        stripeClientId: 'ca_6TCbA0GpnmIafv7SC53zClcFYNajc6st',
+        stripePublishableKey: 'pk_test_fHIOKc7Sf7gNjwUIIT3XJfDt'
+    };
+
+    if (argv.domain === 'prod') {
+        domain.name = 'PROD';
+        domain.apiEndpoint = 'https://otr-backend-service-us-prod.offtherecord.com';
+        domain.stripeClientId = 'ca_6TCbZWE2tFU2EXiOWrkKK3KA5h0NMFIv';
+        domain.stripePublishableKey = 'pk_live_tfkS6orQi9EW3DePjrkHNLMT';
+    } else if (argv.domain === 'local') {
+        domain.name = 'LOCAL';
+        domain.apiEndpoint = 'http://localhost:8080';
+        domain.stripeClientId = 'ca_6TCbA0GpnmIafv7SC53zClcFYNajc6st';
+        domain.stripePublishableKey = 'pk_test_fHIOKc7Sf7gNjwUIIT3XJfDt';
+    }
+
+    return gulp.src(options.buildDir + 'bundle.js')
+        .pipe(replace({
+            patterns: [
+                {
+                    match: 'domain-name',
+                    replacement: domain.name
+                },
+                {
+                    match: 'endpoint',
+                    replacement: domain.apiEndpoint
+                },
+                {
+                    match: 'stripeClientId',
+                    replacement: domain.stripeClientId
+                },
+                {
+                    match: 'stripePublishableKey',
+                    replacement: domain.stripePublishableKey
+                }
+            ]
+        }))
+        .pipe(gulp.dest(options.buildDir + 'bundle.js'))
+        .pipe(connect.reload());
+}
+
+
 function minifySass() {
     return gulp.src(options.baseDir + '/**/*.scss')
         .pipe(sass.sync())
@@ -129,5 +176,6 @@ module.exports = {
     bundle: bundle,
     clean: clean,
     connectServer: connectServer,
-    minifySass: minifySass
+    minifySass: minifySass,
+    replaceVars: replaceVars
 };
