@@ -11,6 +11,7 @@ let connect = require('gulp-connect');
 let sass = require('gulp-sass');
 let cleanCSS = require('gulp-clean-css');
 let del = require('del');
+let replace = require('gulp-replace-task');
 
 sass.compiler = require('node-sass');
 
