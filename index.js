@@ -19,7 +19,6 @@ let options = {
     rootDir: './',
     baseDir: 'app',
     buildDir: 'build/',
-    buildCssDir: 'build/assets/css',
     bundleOpts: {}
 }
 
@@ -29,7 +28,7 @@ function minifySass() {
         .pipe(cleanCSS({debug: true, compatibility: 'ie8'}, function(details) {
             console.log(details.name + ': ' + details.stats.minifiedSize);
         }))
-        .pipe(gulp.dest(options.buildCssDir))
+        .pipe(gulp.dest(options.buildDir))
         .pipe(connect.reload());
 }
 
