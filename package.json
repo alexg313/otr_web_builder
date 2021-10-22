@@ -1,6 +1,6 @@
 {
   "name": "@otr-app/web-builder",
-  "version": "1.1.1-experiment",
+  "version": "1.1.2",
   "description": "A shared build/task runner across front-end applications",
   "main": "index.js",
   "scripts": {
@@ -26,6 +26,7 @@
     "gulp-connect": "^5.7.0",
     "gulp-replace-task": "^2.0.1",
     "gulp-sass": "4.0.2",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "lodash.assign": "^4.2.0",
     "node-sass": "^6.0.1",
     "tsify": "^5.0.4",

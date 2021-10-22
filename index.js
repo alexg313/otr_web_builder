@@ -12,6 +12,7 @@ let sass = require('gulp-sass');
 let cleanCSS = require('gulp-clean-css');
 let del = require('del');
 let replace = require('gulp-replace-task');
+let ts = require('gulp-typescript');
 
 sass.compiler = require('node-sass');
 
@@ -20,6 +21,7 @@ let options = {
     rootDir: './',
     baseDir: 'app',
     buildDir: 'build/',
+    configDir: null,
     bundleOpts: {}
 }
 
@@ -44,7 +46,8 @@ function replaceVars() {
         domain.stripePublishableKey = 'pk_test_fHIOKc7Sf7gNjwUIIT3XJfDt';
     }
 
-    return gulp.src(options.buildDir + 'bundle.js')
+    return gulp.src(options.configDir + "**/*.ts", {base: options.baseDir})
+        .pipe(ts()).js
         .pipe(replace({
             patterns: [
                 {
@@ -65,7 +68,7 @@ function replaceVars() {
                 }
             ]
         }))
-        .pipe(gulp.dest(options.buildDir + 'bundle.js'))
+        .pipe(gulp.dest(options.buildDir))
         .pipe(connect.reload());
 }
 
@@ -165,6 +168,7 @@ exports.bundle = bundle;
 exports.minifySass = minifySass;
 exports.clean = clean;
 exports.connectServer = connectServer;
+exports.replaceVars = replaceVars;
 */
 
 module.exports = {
