@@ -13,6 +13,8 @@ let cleanCSS = require('gulp-clean-css');
 let del = require('del');
 let replace = require('gulp-replace-task');
 let ts = require('gulp-typescript');
+let concat = require('gulp-concat');
+let gulpif = require('gulp-if');
 
 sass.compiler = require('node-sass');
 
@@ -22,6 +24,7 @@ let options = {
     baseDir: 'app',
     buildDir: 'build/',
     configDir: null,
+    shouldConcatCss: false,
     bundleOpts: {}
 }
 
@@ -31,7 +34,9 @@ function replaceVars() {
         name: 'DEVO',
         apiEndpoint: 'https://otr-backend-service-us-devo.offtherecord.com',
         stripeClientId: 'ca_6TCbA0GpnmIafv7SC53zClcFYNajc6st',
-        stripePublishableKey: 'pk_test_fHIOKc7Sf7gNjwUIIT3XJfDt'
+        stripePublishableKey: 'pk_test_fHIOKc7Sf7gNjwUIIT3XJfDt',
+        customerSiteUrl: 'https://brochure-devo.offtherecord.com',
+        debugLog: 'true'
     };
 
     if (argv.domain === 'prod') {
@@ -39,6 +44,9 @@ function replaceVars() {
         domain.apiEndpoint = 'https://otr-backend-service-us-prod.offtherecord.com';
         domain.stripeClientId = 'ca_6TCbZWE2tFU2EXiOWrkKK3KA5h0NMFIv';
         domain.stripePublishableKey = 'pk_live_tfkS6orQi9EW3DePjrkHNLMT';
+        domain.customerSiteUrl = 'https://offtherecord.com';
+        domain.debugLog = argv.debug ? 'true' : 'false';
+
     } else if (argv.domain === 'local') {
         domain.name = 'LOCAL';
         domain.apiEndpoint = 'http://localhost:8080';
@@ -65,6 +73,14 @@ function replaceVars() {
                 {
                     match: 'stripePublishableKey',
                     replacement: domain.stripePublishableKey
+                },
+                {
+                    match: 'debugLog',
+                    replacement: domain.debugLog
+                },
+                {
+                    match: 'customerSiteUrl',
+                    replacement: domain.customerSiteUrl
                 }
             ]
         }))
@@ -79,6 +95,7 @@ function minifySass() {
         .pipe(cleanCSS({debug: true, compatibility: 'ie8'}, function(details) {
             console.log(details.name + ': ' + details.stats.minifiedSize);
         }))
+        .pipe(gulpif(options.shouldConcatCss, concat('all-otr.min.css')))
         .pipe(gulp.dest(options.buildDir))
         .pipe(connect.reload());
 }
