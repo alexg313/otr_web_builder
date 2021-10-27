@@ -15,6 +15,8 @@ let replace = require('gulp-replace-task');
 let ts = require('gulp-typescript');
 let concat = require('gulp-concat');
 let gulpif = require('gulp-if');
+let uglify = require('gulp-uglify-es').default;
+let buffer = require('vinyl-buffer');
 
 sass.compiler = require('node-sass');
 
@@ -25,6 +27,7 @@ let options = {
     buildDir: 'build/',
     configDir: null,
     shouldConcatCss: false,
+    shouldMinifyBundle: false,
     bundleOpts: {}
 }
 
@@ -144,6 +147,8 @@ function bundle(done, isWatchOn) {
                 hasErrors = true;
             })
             .pipe(source("bundle.js"))
+            .pipe(buffer())
+            .pipe(gulpif(options.shouldMinifyBundle, uglify()))
             .pipe(gulp.dest(options.buildDir))
             .pipe(connect.reload())
             .on('end', function() {
@@ -180,13 +185,13 @@ function copyNodeModules(cb) {
 
 
 // Un comment for local testing
-/*
+
 exports.bundle = bundle;
 exports.minifySass = minifySass;
 exports.clean = clean;
 exports.connectServer = connectServer;
 exports.replaceVars = replaceVars;
-*/
+
 
 module.exports = {
     setOptions: (opts) => {
