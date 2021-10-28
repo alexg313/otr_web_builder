@@ -57,7 +57,7 @@ function replaceVars() {
         domain.stripePublishableKey = 'pk_test_fHIOKc7Sf7gNjwUIIT3XJfDt';
     }
 
-    return gulp.src(options.configDir + "**/*.ts", {base: options.baseDir})
+    return gulp.src(options.configDir + "**/*.ts", {base: '.'})
         .pipe(ts()).js
         .pipe(replace({
             patterns: [
