@@ -31,31 +31,31 @@ let options = {
     bundleOpts: {}
 }
 
+let domain = {
+    name: 'DEVO',
+    apiEndpoint: 'https://otr-backend-service-us-devo.offtherecord.com',
+    stripeClientId: 'ca_6TCbA0GpnmIafv7SC53zClcFYNajc6st',
+    stripePublishableKey: 'pk_test_fHIOKc7Sf7gNjwUIIT3XJfDt',
+    customerSiteUrl: 'https://brochure-devo.offtherecord.com',
+    debugLog: 'true'
+};
+
+if (argv.domain === 'prod') {
+    domain.name = 'PROD';
+    domain.apiEndpoint = 'https://otr-backend-service-us-prod.offtherecord.com';
+    domain.stripeClientId = 'ca_6TCbZWE2tFU2EXiOWrkKK3KA5h0NMFIv';
+    domain.stripePublishableKey = 'pk_live_tfkS6orQi9EW3DePjrkHNLMT';
+    domain.customerSiteUrl = 'https://offtherecord.com';
+    domain.debugLog = argv.debug ? 'true' : 'false';
+
+} else if (argv.domain === 'local') {
+    domain.name = 'LOCAL';
+    domain.apiEndpoint = 'http://localhost:8080';
+    domain.stripeClientId = 'ca_6TCbA0GpnmIafv7SC53zClcFYNajc6st';
+    domain.stripePublishableKey = 'pk_test_fHIOKc7Sf7gNjwUIIT3XJfDt';
+}
+
 function replaceVars() {
-
-    var domain = {
-        name: 'DEVO',
-        apiEndpoint: 'https://otr-backend-service-us-devo.offtherecord.com',
-        stripeClientId: 'ca_6TCbA0GpnmIafv7SC53zClcFYNajc6st',
-        stripePublishableKey: 'pk_test_fHIOKc7Sf7gNjwUIIT3XJfDt',
-        customerSiteUrl: 'https://brochure-devo.offtherecord.com',
-        debugLog: 'true'
-    };
-
-    if (argv.domain === 'prod') {
-        domain.name = 'PROD';
-        domain.apiEndpoint = 'https://otr-backend-service-us-prod.offtherecord.com';
-        domain.stripeClientId = 'ca_6TCbZWE2tFU2EXiOWrkKK3KA5h0NMFIv';
-        domain.stripePublishableKey = 'pk_live_tfkS6orQi9EW3DePjrkHNLMT';
-        domain.customerSiteUrl = 'https://offtherecord.com';
-        domain.debugLog = argv.debug ? 'true' : 'false';
-
-    } else if (argv.domain === 'local') {
-        domain.name = 'LOCAL';
-        domain.apiEndpoint = 'http://localhost:8080';
-        domain.stripeClientId = 'ca_6TCbA0GpnmIafv7SC53zClcFYNajc6st';
-        domain.stripePublishableKey = 'pk_test_fHIOKc7Sf7gNjwUIIT3XJfDt';
-    }
 
     return gulp.src(options.configDir + "**/*.ts", {base: '.'})
         .pipe(ts()).js
@@ -148,6 +148,35 @@ function bundle(done, isWatchOn) {
             })
             .pipe(source("bundle.js"))
             .pipe(buffer())
+            .pipe(replace({
+                patterns: [
+                    {
+                        match: 'domain-name',
+                        replacement: domain.name
+                    },
+                    {
+                        match: 'endpoint',
+                        replacement: domain.apiEndpoint
+                    },
+                    {
+                        match: 'stripeClientId',
+                        replacement: domain.stripeClientId
+                    },
+                    {
+                        match: 'stripePublishableKey',
+                        replacement: domain.stripePublishableKey
+                    },
+                    {
+                        match: 'debugLog',
+                        replacement: domain.debugLog
+                    },
+                    {
+                        match: 'customerSiteUrl',
+                        replacement: domain.customerSiteUrl
+                    }
+                ]
+            }))
+            .pipe(gulpif(options.shouldMinifyBundle, buffer()))
             .pipe(gulpif(options.shouldMinifyBundle, uglify()))
             .pipe(gulp.dest(options.buildDir))
             .pipe(connect.reload())
