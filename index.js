@@ -28,6 +28,12 @@ let options = {
     configDir: null,
     shouldConcatCss: false,
     shouldMinifyBundle: false,
+    uglifyOptions: {
+        output: {
+            comments: /^\s*@/
+            // will keep all comments beginning with ' @'
+        }
+    },
     bundleOpts: {}
 }
 
@@ -177,7 +183,7 @@ function bundle(done, isWatchOn) {
                 ]
             }))
             .pipe(gulpif(options.shouldMinifyBundle, buffer()))
-            .pipe(gulpif(options.shouldMinifyBundle, uglify()))
+            .pipe(gulpif(options.shouldMinifyBundle, uglify(uglifyOptions)))
             .pipe(gulp.dest(options.buildDir))
             .pipe(connect.reload())
             .on('end', function() {
