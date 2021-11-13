@@ -183,7 +183,7 @@ function bundle(done, isWatchOn) {
                 ]
             }))
             .pipe(gulpif(options.shouldMinifyBundle, buffer()))
-            .pipe(gulpif(options.shouldMinifyBundle, uglify(uglifyOptions)))
+            .pipe(gulpif(options.shouldMinifyBundle, uglify(options.uglifyOptions)))
             .pipe(gulp.dest(options.buildDir))
             .pipe(connect.reload())
             .on('end', function() {
