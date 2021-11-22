@@ -1,6 +1,6 @@
 {
   "name": "@otr-app/web-builder",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "description": "A shared build/task runner across front-end applications",
   "main": "index.js",
   "scripts": {
@@ -19,12 +19,13 @@
   "dependencies": {
     "@babel/core": "^7.16.0",
     "@babel/plugin-transform-typescript": "^7.16.1",
-    "gulp-babel": "^8.0.0",
+    "babel-plugin-transform-remove-imports": "^1.7.0",
     "browserify": "^17.0.0",
     "child_process": "^1.0.2",
     "del": "^2.2.0",
     "fancy-log": "^1.3.3",
     "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
     "gulp-clean-css": "3.9.0",
     "gulp-concat": "^2.6.1",
     "gulp-connect": "^5.7.0",
