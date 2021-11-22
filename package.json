@@ -1,6 +1,6 @@
 {
   "name": "@otr-app/web-builder",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "A shared build/task runner across front-end applications",
   "main": "index.js",
   "scripts": {
@@ -38,5 +38,10 @@
     "vinyl-source-stream": "^2.0.0",
     "watchify": "^4.0.0",
     "yargs": "^17.2.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/plugin-transform-typescript": "^7.16.1",
+    "gulp-babel": "^8.0.0"
   }
 }
