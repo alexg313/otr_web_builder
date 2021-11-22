@@ -26,6 +26,7 @@ let options = {
     baseDir: 'app',
     buildDir: 'build/',
     configDir: null,
+    tsConfig: null,
     shouldConcatCss: false,
     shouldMinifyBundle: false,
     uglifyOptions: {
@@ -111,7 +112,7 @@ function minifySass() {
 
 function compileTs() {
     return gulp.src(options.baseDir + '/**/*.ts')
-        .pipe(ts()).js
+        .pipe(ts(options.tsConfig ? options.tsConfig.compilerOptions : undefined)).js
         .pipe(gulp.dest(options.buildDir));
 }
 
