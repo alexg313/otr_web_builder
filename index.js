@@ -109,6 +109,11 @@ function minifySass() {
         .pipe(connect.reload());
 }
 
+function compileTs() {
+    return gulp.src(options.baseDir + '**/*.ts')
+        .pipe(ts()).js
+        .pipe(gulp.dest(options.buildDir));
+}
 
 function clean() {
     return del([options.buildDir]).then(function(paths) {
@@ -238,5 +243,6 @@ module.exports = {
     clean: clean,
     connectServer: connectServer,
     minifySass: minifySass,
-    replaceVars: replaceVars
+    replaceVars: replaceVars,
+    compileTs, compileTs
 };
