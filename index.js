@@ -110,7 +110,7 @@ function minifySass() {
 }
 
 function compileTs() {
-    return gulp.src(options.baseDir + '**/*.ts')
+    return gulp.src(options.baseDir + '/**/*.ts')
         .pipe(ts()).js
         .pipe(gulp.dest(options.buildDir));
 }
