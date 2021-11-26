@@ -17,6 +17,7 @@ let concat = require('gulp-concat');
 let gulpif = require('gulp-if');
 let uglify = require('gulp-uglify-es').default;
 let buffer = require('vinyl-buffer');
+let babel = require('gulp-babel');
 
 sass.compiler = require('node-sass');
 
@@ -111,7 +112,13 @@ function minifySass() {
 }
 
 function compileTs() {
-    return gulp.src(options.baseDir + '/**/*.ts')
+    return gulp.src([options.baseDir + '/**/*.ts'])
+        .pipe(babel({
+            plugins: [
+                ['@babel/plugin-transform-typescript'],
+                ['babel-plugin-transform-remove-imports', { test: '.' }]
+            ]
+        }))
         .pipe(ts(options.tsConfig ? options.tsConfig.compilerOptions : undefined)).js
         .pipe(gulp.dest(options.buildDir));
 }
@@ -232,7 +239,7 @@ exports.minifySass = minifySass;
 exports.clean = clean;
 exports.connectServer = connectServer;
 exports.replaceVars = replaceVars;
-
+exports.compileTs = compileTs;
 
 module.exports = {
     setOptions: (opts) => {
