@@ -223,7 +223,10 @@ function copyNodeModules(cb) {
     gulp.src(options.rootDir + "package.json")
         .pipe(gulp.dest(options.buildDir))
         .on('end', () => {
-            let cmd = spawn('npm',  ['install', '--prefix', './build/', '--only', 'prod'], {stdio: 'inherit'});
+            let cmd = spawn('npm',  ['install', '--prefix', './build/', '--only', 'prod'], {
+                stdio: 'inherit',
+                shell: true
+            });
             cmd.on('close', function (code) {
                 log.info('Npm exited with code ' + code);
                 cb(code);
