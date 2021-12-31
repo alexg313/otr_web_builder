@@ -272,6 +272,5 @@ module.exports = {
   connectServer: connectServer,
   minifySass: minifySass,
   replaceVars: replaceVars,
-  compileTs,
-  compileTs,
+  compileTs: compileTs,
 };
