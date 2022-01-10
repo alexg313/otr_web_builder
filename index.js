@@ -121,6 +121,7 @@ function compileTs() {
       babel({
         plugins: [
           ["@babel/plugin-transform-typescript"],
+          ['babel-plugin-remove-export-keywords'],
           ["babel-plugin-transform-remove-imports", { test: "." }],
         ],
       })

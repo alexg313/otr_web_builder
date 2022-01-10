@@ -1,6 +1,6 @@
 {
   "name": "@otr-app/web-builder",
-  "version": "3.1.2",
+  "version": "3.2.0",
   "description": "A shared build/task runner across front-end applications",
   "main": "index.js",
   "scripts": {
