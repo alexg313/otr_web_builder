@@ -26,7 +26,7 @@ let options = {
   rootDir: "./",
   baseDir: "app",
   buildDir: "build/",
-  CSSBuildDir: "build/",
+  cssBuildDir: "build/",
   configDir: null,
   tsConfig: null,
   shouldConcatCss: false,
@@ -111,7 +111,7 @@ function minifySass() {
       })
     )
     .pipe(gulpif(options.shouldConcatCss, concat("all-otr.min.css")))
-    .pipe(gulp.dest(options.CSSBuildDir))
+    .pipe(gulp.dest(options.cssBuildDir))
     .pipe(connect.reload());
 }
 
