@@ -8,7 +8,6 @@ let argv = require("yargs").argv;
 let assign = require("lodash.assign");
 let log = require("fancy-log");
 let connect = require("gulp-connect");
-let sass = require("gulp-sass");
 let cleanCSS = require("gulp-clean-css");
 let del = require("del");
 let replace = require("gulp-replace-task");
@@ -18,8 +17,7 @@ let gulpif = require("gulp-if");
 let uglify = require("gulp-uglify-es").default;
 let buffer = require("vinyl-buffer");
 let babel = require("gulp-babel");
-
-sass.compiler = require("node-sass");
+const sass = require("gulp-dart-sass");
 
 let options = {
   port: 5555,
