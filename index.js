@@ -121,7 +121,8 @@ function compileTs() {
         plugins: [
           ["@babel/plugin-transform-typescript"],
           ["babel-plugin-remove-import-export"],
-        ],
+          ["@babel/plugin-proposal-decorators", {legacy: true}],
+	],
       })
     )
     .pipe(ts(options.tsConfig ? options.tsConfig.compilerOptions : undefined))
