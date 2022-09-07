@@ -25,6 +25,7 @@
     "babel-plugin-remove-import-export": "^1.1.1",
     "babel-plugin-transform-remove-imports": "^1.7.0",
     "browserify": "^17.0.0",
+    "browserify-incremental": "^3.1.1",
     "child_process": "^1.0.2",
     "del": "^2.2.0",
     "factor-bundle": "^2.5.0",
